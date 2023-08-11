@@ -2,7 +2,7 @@
 Full Stack Project Store Management
 
 Client Side - Typescript:
-React Js
+React.Js
 Redux Toolkit
 Axios
 
