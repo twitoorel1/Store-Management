@@ -1,13 +1,14 @@
 # Store-Management
 Full Stack Project Store Management
 
-Client Side - Typescript:
-React.Js
+
+### Client Side - Typescript:
+
+ReactJs
 Redux Toolkit
 Axios
 
-
-Server Side - Typescript:
-Node Js
-Express Js
+### Server Side - Typescript:
+NodeJs
+ExpressJs
 MySql
