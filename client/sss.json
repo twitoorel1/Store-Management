@@ -1,0 +1,6 @@
+{
+	"error": true,
+	"statusCode": 404,
+	"message": "User Not Found",
+	"stack": "Error: User Not Found\n    at C:\\Users\\Orel\\Desktop\\project\\Files\\server\\src\\controllers\\auth.controllers.ts:16:26\n    at Generator.next (<anonymous>)\n    at fulfilled (C:\\Users\\Orel\\Desktop\\project\\Files\\server\\src\\controllers\\auth.controllers.ts:5:58)\n    at processTicksAndRejections (node:internal/process/task_queues:95:5)"
+}

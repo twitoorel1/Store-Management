@@ -6,7 +6,6 @@ import { JwtPayload } from 'jsonwebtoken';
 import { createAccessToken, verifyAccessToken } from '../services/jwt.services';
 import { UnauthorizeError } from '../errors/Errors';
 import { IUser } from '../types/global';
-import { generateRandomNumbers } from '../utils/randomNumbers';
 
 const DB_NAME = 'users';
 
@@ -58,13 +57,12 @@ async function login(user: any) {
 }
 
 async function register(body: IUser) {
-	const randomId = await generateRandomNumbers(3);
-	const query = `INSERT INTO ${DB_NAME} (id, full_name, username, email, password) VALUES (?, ?, ?, ?, ?);`;
+	const query = `INSERT INTO ${DB_NAME} (full_name, username, email, password) VALUES (?, ?, ?, ?);`;
 
 	try {
 		const hashedPassword = await bcrypt.hash(body.password, 10);
 		console.log(hashedPassword);
-		return await queryDatabase(query, [randomId, body.full_name, body.username, body.email, hashedPassword]);
+		return await queryDatabase(query, [body.full_name, body.username, body.email, hashedPassword]);
 	} catch (error) {
 		console.log(error);
 		throw error;

@@ -4,6 +4,7 @@ import { NotFoundError, BadRequestError, UnauthorizeError, ForbiddenError, Payme
 function generateCustomErrorResponse(res: Response, error: any, statusCode: number) {
 	return res.status(Number(statusCode)).json({
 		error: true,
+		statusCode: statusCode,
 		message: error.message,
 		stack: process.env.NODE_ENV === 'development' && error.stack ? error.stack : {}
 	});
