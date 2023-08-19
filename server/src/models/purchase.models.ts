@@ -11,13 +11,13 @@ interface IPurchaseProps {
 }
 
 /* CRUD
- * Create - createOne, singleCreateByIdCustomer
+ * Create - createOne
  * Read - getAll, getById, totalPurchase
  * Update - updateById
  * Delete - deleteById
  */
 
-/* Mission 2-Area-2 */
+/* Mission 2-Area-2 - Add Button */
 async function createOne(body: IPurchaseProps) {
 	const randomId = await generateRandomNumbers(5);
 	const query = `SELECT quantity FROM products WHERE id = ?;`;
