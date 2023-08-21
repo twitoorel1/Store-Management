@@ -7,7 +7,7 @@ const index = () => {
 		// relative w-screen h-screen
 		<>
 			<Header />
-			<main className="mb-5">
+			<main className="mb-24">
 				<Outlet />
 			</main>
 			<Footer />
