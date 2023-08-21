@@ -1,4 +1,5 @@
 {
+	"domain_client": "store-management.com",
 	"port": 5000,
 	"database": {
 		"host": "localhost",

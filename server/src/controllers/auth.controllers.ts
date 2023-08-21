@@ -5,6 +5,8 @@ import errorHandler from '../errors/errorHandler';
 import { loginRequestSchema, registerRequestSchema } from '../validators/authRequests.schema';
 import User from '../models/user.models';
 import bcrypt from 'bcrypt';
+import { sendEmail } from '../services/sendEmail.services';
+import config from 'config';
 
 async function login(req: Request, res: Response, next: NextFunction) {
 	try {
@@ -43,6 +45,15 @@ async function register(req: Request, res: Response, next: NextFunction) {
 		if (user) return next(new NotFoundError('User already exists'));
 
 		const newUser = await User.register(req.body);
+
+		let domainClient = config.get('domain_client');
+		await sendEmail({
+			from: 'twitoorel1@gmail.com',
+			to: newUser.email,
+			subject: 'New User Registered',
+			html: `Welcome to Store Management Service For Login <a href="http://${domainClient}/auth/login">Click Here</a>`
+		});
+
 		res.status(201).send({ error: false, statusCode: 201, message: 'Register Successful', isAuthenticated: false, user: newUser });
 	} catch (error: any) {
 		if (error.name === 'ValidationError') {
