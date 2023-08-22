@@ -1,5 +1,5 @@
 import { FaRegMoneyBillAlt } from 'react-icons/fa';
-import ProductBox from '../../components/ProductBox';
+import ProductBox from '../../components/productPage/ProductBox';
 
 const Products = () => {
 	return (
@@ -24,14 +24,14 @@ const Products = () => {
 				<h1 className="font-semibold text-center text-[2rem] mb-[20px]">Products Page</h1>
 
 				{/* Grid All Products */}
-				<div className="grid grid-cols-1 gap-[30px] sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl: 2xl:grid-cols-5">
-					{/* One Product Box - Starting */}
+				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-[30px]">
+					{/* Product Box - Starting */}
 					<ProductBox />
 					<ProductBox />
 					<ProductBox />
 					<ProductBox />
 					<ProductBox />
-					{/* One Product Box - End */}
+					{/* Product Box - End */}
 				</div>
 			</div>
 		</div>
