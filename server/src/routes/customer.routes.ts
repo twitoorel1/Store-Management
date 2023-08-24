@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.route('/').get(catchAsyncError(customerController.getAll)).post(catchAsyncError(customerController.createOne));
 
-router.route('/id/:id').get(catchAsyncError(customerController.getOneById)).put(catchAsyncError(customerController.updateOneById)).delete(catchAsyncError(customerController.deleteOneById));
+router.route('/id/:id').get(catchAsyncError(customerController.getOneById)).patch(catchAsyncError(customerController.updateOneById)).delete(catchAsyncError(customerController.deleteOneById));
 
 router.get('/listPurchase/:productId', catchAsyncError(customerController.customersPurchase));
 

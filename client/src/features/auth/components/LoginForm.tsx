@@ -7,7 +7,10 @@ import LoginValidation from '../validations/LoginValidation';
 import { useNavigate } from 'react-router-dom';
 
 const LoginForm = () => {
+	const dispatch = useAppDispatch();
 	const navigate = useNavigate();
+	const { message, isAuthenticated } = useAppSelector(state => state.auth);
+
 	const {
 		register,
 		handleSubmit,
@@ -21,9 +24,6 @@ const LoginForm = () => {
 		mode: 'onChange',
 		reValidateMode: 'onChange'
 	});
-
-	const dispatch = useAppDispatch();
-	const { message, isAuthenticated } = useAppSelector(state => state.auth);
 
 	const onSubmitLogin = async (data: FormLoginInputs) => {
 		try {

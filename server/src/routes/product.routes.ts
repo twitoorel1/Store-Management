@@ -8,7 +8,7 @@ const router = express.Router();
 
 router.route('/').get(catchAsyncError(productController.getAll)).post(catchAsyncError(productController.createOne));
 
-router.route('/id/:id').get(catchAsyncError(productController.getOneById)).put(catchAsyncError(productController.updateOneById)).delete(catchAsyncError(productController.deleteOneById));
+router.route('/id/:id').get(catchAsyncError(productController.getOneById)).patch(catchAsyncError(productController.updateOneById)).delete(catchAsyncError(productController.deleteOneById));
 
 router.get('/listPurchase/:customerId', catchAsyncError(productController.productsPurchase));
 

@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.route('/').get(catchAsyncError(purchaseController.getAll)).post(catchAsyncError(purchaseController.createOne));
 
-router.route('/id/:id').get(catchAsyncError(purchaseController.getOneById)).put(catchAsyncError(purchaseController.updateOneById)).delete(catchAsyncError(purchaseController.deleteOneById));
+router.route('/id/:id').get(catchAsyncError(purchaseController.getOneById)).patch(catchAsyncError(purchaseController.updateOneById)).delete(catchAsyncError(purchaseController.deleteOneById));
 
 router.get('/totalPurchase', catchAsyncError(purchaseController.totalPurchase));
 

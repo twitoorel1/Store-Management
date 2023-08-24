@@ -95,11 +95,12 @@ async function updateOneById(id: number, body: IPurchaseProps) {
 
 /* Mission 2-Area-1 */
 async function totalPurchase() {
-	const query = `SELECT COUNT(*) as total FROM ${DB_NAME};`;
+	// const query = `SELECT COUNT(*) as total FROM ${DB_NAME};`; /* total orders number */
+	const query = `SELECT sum(price) as total_purchases FROM purchases INNER JOIN products ON purchases.products_id = products.id`; /* total orders price */
 
 	try {
 		const result = await queryDatabase(query);
-		return result[0].total;
+		return result[0].total_purchases;
 	} catch (error) {
 		console.log(error);
 		throw error;

@@ -13,7 +13,11 @@ import Purchases from './pages/purchases/Purchases';
 import Login from './pages/auth/Login';
 import Error404 from './pages/Errors/Error404';
 
+// import { getAllCustomerPurchaseByIdProduct } from './features/products/services/productService';
+
 const App = () => {
+	// getAllCustomerPurchaseByIdProduct(5).then(data => console.log(data.data));
+
 	return (
 		<Routes>
 			<Route path="/" element={<LayoutMain />}>

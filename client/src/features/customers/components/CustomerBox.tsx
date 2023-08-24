@@ -1,9 +1,25 @@
-import { useState } from 'react';
+import { useState, useEffect, Fragment } from 'react';
 import { AiOutlineCloseCircle } from 'react-icons/ai';
 import { Link } from 'react-router-dom';
+import { RootState } from '../../../redux/store';
+import { useAppDispatch, useAppSelector } from '../../../hooks/useRedux';
+import { getAllProductsFunction } from '../../products/redux/productSlice';
 
-const CustomerBox = () => {
+const CustomerBox = ({ customer, allCustomers }: any) => {
+	const dispatch = useAppDispatch();
 	const [openBuyNow, setOpenBuyNow] = useState(false);
+	const [optionSelect, setOptionSelect] = useState<number>(0);
+	const { products } = useAppSelector((state: RootState) => state.product);
+
+	useEffect(() => {
+		dispatch(getAllProductsFunction());
+	}, [dispatch]);
+
+	const addProductByCustomerId = async (e: any) => {
+		e.preventDefault();
+		console.log('Id Product: ' + optionSelect);
+		console.log('Id Customer: ' + customer.id);
+	};
 
 	return (
 		<div className="rounded-md shadow-md bg-blue-100 py-5 px-5">
@@ -16,16 +32,31 @@ const CustomerBox = () => {
 							</svg>
 						</div>
 					</span>
-					<h1 className="text-base font-light text-center">Orel Twito</h1>
+					{customer.id}
+					<h1 className="text-base font-light underline">
+						<Link to={`/customers/${customer.id}`}>
+							{customer.first_name} {customer.last_name}
+						</Link>
+					</h1>
 				</div>
 			</div>
+
+			{/* Get All products purchased by (id customer) */}
 			<div className="flex justify-center items-center gap-x-5 mt-5">
 				<ul className="list-disc list-inside">
-					<li className="flex items-center gap-x-3 mb-3">
+					{products
+						.filter(p => p.id === 1)
+						.map((product: any, index: number) => (
+							<li key={index}>
+								<Link to={`/products/${product.id}`}>{product.name}</Link>
+							</li>
+						))}
+					{/* <li className="flex items-center gap-x-3 mb-3">
 						<Link to={'/'}>Iphone 14 Pro Max</Link>
-					</li>
+					</li> */}
 				</ul>
 			</div>
+
 			<button className="bg-primary text-white py-2 rounded-global w-full px-4 mt-3" onClick={() => setOpenBuyNow(true)}>
 				Buy Product
 			</button>
@@ -33,11 +64,16 @@ const CustomerBox = () => {
 			{/* Open in Click 'Buy Product' */}
 			{openBuyNow && (
 				<div className="mt-5 bg-blue-500 p-2.5 shadow-md rounded-md">
-					<form className="flex flex-col gap-y-3 px-3 py-2">
-						<select className="rounded-md">
-							<option value={1}>Item 1</option>
-							<option value={2}>Item 2</option>
-							<option value={3}>Item 3</option>
+					<form onSubmit={addProductByCustomerId} className="flex items-center flex-col gap-y-3 px-3 py-2">
+						<select className="rounded-md mb-2" onChange={(e: any) => setOptionSelect(e.target.value)}>
+							{products.map((product: any, index: number) => (
+								<Fragment key={index}>
+									<option value="" hidden>
+										Select Product
+									</option>
+									<option value={product.id}>{product.name}</option>
+								</Fragment>
+							))}
 						</select>
 						<button className="max-w-fit px-12 py-2 bg-primary-500 text-white rounded-global mx-auto" type="submit" onClick={() => setOpenBuyNow(true)}>
 							Buy

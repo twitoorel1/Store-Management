@@ -26,7 +26,7 @@ async function getAll(req: Request, res: Response, next: NextFunction) {
 	try {
 		const purchases = await Purchase.getAll();
 		if (purchases === null) return next(new NotFoundError('Purchases not found'));
-		res.status(200).send({ error: false, data: purchases });
+		res.status(200).send({ error: false, message: 'Get All Purchases Successfully', data: purchases });
 	} catch (error) {
 		console.error(error);
 		res.status(500).json({ error: 'Error From Get All - Purchase' });
@@ -37,7 +37,7 @@ async function getOneById(req: Request, res: Response, next: NextFunction) {
 	try {
 		const purchaseById = await Purchase.getOneById(+req.params.id);
 		if (purchaseById === null) return next(new NotFoundError('Purchase not found'));
-		res.status(200).send({ error: false, data: purchaseById });
+		res.status(200).send({ error: false, message: `Get One Id Purchase: ${req.params.id} Successfully`, data: purchaseById });
 	} catch (error) {
 		console.error(error);
 		res.status(500).json({ error: 'Error From Get One By Id - Purchase' });
@@ -75,7 +75,7 @@ async function updateOneById(req: Request, res: Response, next: NextFunction) {
 async function totalPurchase(req: Request, res: Response, next: NextFunction) {
 	try {
 		const totalPurchase = await Purchase.totalPurchase();
-		res.status(200).send({ error: false, data: totalPurchase });
+		res.status(200).send({ error: false, message: 'Get Total Purchases Priced Successfully', data: totalPurchase });
 	} catch (error) {
 		console.error(error);
 		res.status(500).json({ error: 'Error From Total Purchase - Purchase' });

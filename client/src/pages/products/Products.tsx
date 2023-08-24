@@ -1,7 +1,28 @@
+import { useEffect } from 'react';
 import { FaRegMoneyBillAlt } from 'react-icons/fa';
-import ProductBox from '../../components/productPage/ProductBox';
+import ProductBox from '../../features/products/components/ProductBox';
+import { getAllProductsFunction, getTotalPurchasesFunction } from '../../features/products/redux/productSlice';
+import { useAppDispatch, useAppSelector } from '../../hooks/useRedux';
+import { RootState } from '../../redux/store';
 
 const Products = () => {
+	const dispatch = useAppDispatch();
+
+	const { products, total_purchases, isLoading, isError } = useAppSelector((state: RootState) => state.product);
+
+	useEffect(() => {
+		dispatch(getTotalPurchasesFunction());
+		dispatch(getAllProductsFunction());
+	}, [dispatch]);
+
+	if (isLoading) {
+		return <div>Loading...</div>;
+	}
+
+	if (isError) {
+		return <div>Error loading products</div>;
+	}
+
 	return (
 		<div className="">
 			{/* Head */}
@@ -14,7 +35,7 @@ const Products = () => {
 						<span className="text-primary-500">
 							<FaRegMoneyBillAlt size={35} />
 						</span>
-						<h4 className="text-2xl font-semibold text-center">21,123</h4>
+						<h4 className="text-2xl font-semibold text-center">{total_purchases}</h4>
 					</div>
 				</div>
 			</div>
@@ -26,11 +47,9 @@ const Products = () => {
 				{/* Grid All Products */}
 				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-[30px]">
 					{/* Product Box - Starting */}
-					<ProductBox />
-					<ProductBox />
-					<ProductBox />
-					<ProductBox />
-					<ProductBox />
+					{products.map((product: any, index: any) => (
+						<ProductBox key={index} product={product} allProducts={products} />
+					))}
 					{/* Product Box - End */}
 				</div>
 			</div>
