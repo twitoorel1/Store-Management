@@ -1,25 +1,58 @@
 import { useState, useEffect, Fragment } from 'react';
-import { AiOutlineCloseCircle } from 'react-icons/ai';
 import { Link } from 'react-router-dom';
-import { RootState } from '../../../redux/store';
-import { useAppDispatch, useAppSelector } from '../../../hooks/useRedux';
-import { getAllProductsFunction } from '../../products/redux/productSlice';
+import { AiOutlineCloseCircle } from 'react-icons/ai';
+import { useAppDispatch, useAppSelector } from '@/hooks/useRedux';
+import { clearProductsPurchases, getAllFunction, getAllProductsPurchaseByCustomerIdFunction } from '@features/products/redux';
+import { createOneFunction } from '@/features/purchases/redux';
 
-const CustomerBox = ({ customer, allCustomers }: any) => {
+interface ProductPurchaseProps {
+	product_id: 1;
+	customer_id: 2;
+	product_name: 'Computer';
+	purchase_date: '2023-08-24T17:37:46.000Z';
+}
+
+const CustomerBox = ({ customer, allCustomers }: { customer: any; allCustomers: any }) => {
 	const dispatch = useAppDispatch();
 	const [openBuyNow, setOpenBuyNow] = useState(false);
-	const [optionSelect, setOptionSelect] = useState<number>(0);
-	const { products } = useAppSelector((state: RootState) => state.product);
+	const [selectedProduct, setSelectedProduct] = useState({ productId: '', customerId: '' });
+	const { allProducts, productsPurchases, isLoading } = useAppSelector(state => state.product);
 
 	useEffect(() => {
-		dispatch(getAllProductsFunction());
+		dispatch(getAllFunction());
 	}, [dispatch]);
 
-	const addProductByCustomerId = async (e: any) => {
+	useEffect(() => {
+		dispatch(getAllProductsPurchaseByCustomerIdFunction([customer.id]));
+
+		return () => {
+			dispatch(clearProductsPurchases([]));
+		};
+	}, [dispatch, customer.id]);
+
+	const handleAddProductByCustomerId = async (e: any) => {
 		e.preventDefault();
-		console.log('Id Product: ' + optionSelect);
-		console.log('Id Customer: ' + customer.id);
+
+		const data = {
+			products_id: selectedProduct,
+			customers_id: customer.id
+		};
+
+		await dispatch(createOneFunction([data]));
+
+		// console.log('Id Product: ' + selectedProduct);
+		// console.log('Id Customer: ' + customer.id);
+
+		setTimeout(() => {
+			setOpenBuyNow(false);
+		}, 500);
 	};
+
+	const productsPurchasesFilter: ProductPurchaseProps[] = productsPurchases.flat().filter((purchase: ProductPurchaseProps) => purchase.customer_id === customer.id);
+
+	if (isLoading) {
+		return <div>Loading...</div>;
+	}
 
 	return (
 		<div className="rounded-md shadow-md bg-blue-100 py-5 px-5">
@@ -42,31 +75,26 @@ const CustomerBox = ({ customer, allCustomers }: any) => {
 			</div>
 
 			{/* Get All products purchased by (id customer) */}
-			<div className="flex justify-center items-center gap-x-5 mt-5">
-				<ul className="list-disc list-inside">
-					{products
-						.filter(p => p.id === 1)
-						.map((product: any, index: number) => (
-							<li key={index}>
-								<Link to={`/products/${product.id}`}>{product.name}</Link>
-							</li>
-						))}
-					{/* <li className="flex items-center gap-x-3 mb-3">
-						<Link to={'/'}>Iphone 14 Pro Max</Link>
-					</li> */}
-				</ul>
-			</div>
+			{productsPurchasesFilter.map((purchase: any, index: number) => (
+				<Fragment key={index}>
+					<div className="flex items-center justify-center mt-5">
+						<div className="flex items-center justify-between gap-x-5">
+							<Link to={`/products/${purchase.product_id}`}>{purchase.product_name}</Link>
+						</div>
+					</div>
+				</Fragment>
+			))}
 
-			<button className="bg-primary text-white py-2 rounded-global w-full px-4 mt-3" onClick={() => setOpenBuyNow(true)}>
+			<button type="button" className="text-white bg-blue-500 rounded-md p-[5px] w-full mt-7" onClick={() => setOpenBuyNow(true)}>
 				Buy Product
 			</button>
 
 			{/* Open in Click 'Buy Product' */}
 			{openBuyNow && (
 				<div className="mt-5 bg-blue-500 p-2.5 shadow-md rounded-md">
-					<form onSubmit={addProductByCustomerId} className="flex items-center flex-col gap-y-3 px-3 py-2">
-						<select className="rounded-md mb-2" onChange={(e: any) => setOptionSelect(e.target.value)}>
-							{products.map((product: any, index: number) => (
+					<form onSubmit={handleAddProductByCustomerId} className="flex items-center flex-col gap-y-3 px-3 py-2">
+						<select className="rounded-md mb-2" onChange={(e: any) => setSelectedProduct(e.target.value)}>
+							{allProducts.map((product: any, index: number) => (
 								<Fragment key={index}>
 									<option value="" hidden>
 										Select Product
@@ -75,7 +103,7 @@ const CustomerBox = ({ customer, allCustomers }: any) => {
 								</Fragment>
 							))}
 						</select>
-						<button className="max-w-fit px-12 py-2 bg-primary-500 text-white rounded-global mx-auto" type="submit" onClick={() => setOpenBuyNow(true)}>
+						<button type="submit" className="max-w-fit px-12 py-2 bg-white text-blue-500 rounded-md mx-auto font-semibold">
 							Buy
 						</button>
 						<span onClick={() => setOpenBuyNow(false)} className="cursor-pointer mt-3 mx-auto">

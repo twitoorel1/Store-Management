@@ -15,7 +15,8 @@ export interface ICustomerState {
 
 	// From Server
 	message: string | null;
-	customers: any[];
+	allCustomers: ICustomer[];
+	customersPurchases: any;
 	oneCustomer: ICustomer;
 }
 
@@ -24,3 +25,5 @@ export interface IEditCustomerInputs {
 	last_name?: string;
 	city?: string;
 }
+
+// Get All Customers Purchased Product By Id Product (id product)

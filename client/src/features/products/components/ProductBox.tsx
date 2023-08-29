@@ -1,35 +1,60 @@
-import { useState, useEffect, Fragment } from 'react';
+import { useState, useEffect, Fragment, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { AiOutlineShoppingCart, AiOutlineDollarCircle, AiOutlineGold, AiOutlineCloseCircle } from 'react-icons/ai';
-import { getAllCustomerPurchaseByIdProductsFunction } from '../redux/productSlice';
-import { useAppDispatch, useAppSelector } from '../../../hooks/useRedux';
-import { RootState } from '../../../redux/store';
+import { getAllCustomersPurchasedByProductIdFunction, clearCustomersPurchases } from '@features/customers/redux';
+import { createOneFunction } from '@features/purchases/redux';
+import { IProduct } from '@/types/productTypes';
+import { useAppDispatch, useAppSelector } from '@/hooks/useRedux';
 
-interface IProductProps {
-	id: number;
-	name: string;
-	price: number;
-	quantity: number;
-	created_at: string;
-	updated_at: string;
+interface purchaseProps {
+	product_id: number;
+	customer_id: number;
+	customer_fullName: string;
+	purchase_date: string;
 }
 
-const ProductBox = ({ product, allProducts }: any) => {
+const ProductBox = ({ product, allProducts }: { product: IProduct; allProducts: IProduct[] }) => {
 	const dispatch = useAppDispatch();
 	const [openAdd, setOpenAdd] = useState(false);
-	const [optionSelect, setOptionSelect] = useState<number>(0);
+	const [selectedProduct, setSelectedProduct] = useState({ productId: '', customerId: '' });
+	const { customersPurchases, isLoading } = useAppSelector(state => state.customer);
+	// const productCustomersPurchases: purchaseProps[] = customersPurchases.flat().filter((purchase: purchaseProps) => purchase.product_id === product.id);
+	const productCustomersPurchases: purchaseProps[] = customersPurchases.map((p: purchaseProps) => p).filter((x: purchaseProps) => x.product_id === product.id);
 
-	// const { customer_purchases } = useAppSelector((state: RootState) => state.product);
+	useEffect(() => {
+		dispatch(getAllCustomersPurchasedByProductIdFunction([product.id]));
 
-	// useEffect(() => {
-	// dispatch(getAllCustomerPurchaseByIdProductsFunction(product.id));
-	// }, [customer_purchases]);
+		return () => {
+			dispatch(clearCustomersPurchases([]));
+		};
+	}, [dispatch, product.id]);
 
-	const addProductByCustomerId = async (e: any) => {
-		e.preventDefault();
-		console.log('Id Product: ' + optionSelect);
-		// console.log('Id Customer: ' + customer.id);
+	const handleAddButtonClick = (purchase: any) => {
+		setSelectedProduct({ productId: purchase.product_id, customerId: purchase.customer_id });
+		setOpenAdd(true);
 	};
+
+	const handleSubmitAddProduct = async (e: any) => {
+		e.preventDefault();
+
+		const data = {
+			products_id: selectedProduct.productId,
+			customers_id: selectedProduct.customerId
+		};
+
+		await dispatch(createOneFunction([data]));
+
+		// console.log('Id Product: ' + selectedProduct.productId);
+		// console.log('Id Customer: ' + selectedProduct.customerId);
+
+		setTimeout(() => {
+			setOpenAdd(false);
+		}, 500);
+	};
+
+	if (isLoading) {
+		return <div>Loading...</div>;
+	}
 
 	return (
 		<>
@@ -60,38 +85,31 @@ const ProductBox = ({ product, allProducts }: any) => {
 				</div>
 
 				{/* All Customers */}
-				{/* {customer_purchases.map((c: any, index: number) => {
-					const dateObject: any = new Date(c.purchase_date).toLocaleDateString();
+				{productCustomersPurchases.map((purchase: any, index: number) => {
+					const dateObject: any = new Date(purchase.purchase_date).toLocaleDateString();
+
 					return (
 						<Fragment key={index}>
 							<div className="flex items-center justify-center gap-x-5 mt-5">
+								<span>
+									c{purchase.customer_id} p{purchase.product_id}
+								</span>
 								<h1 className="text-[15px] font-light">
-									<Link to={'/'}>{c.customer_fullName}</Link>
+									<Link to={`/customers/${purchase.customer_id}`}>{purchase.customer_fullName}</Link>
 								</h1>
 								<h2 className="text-[15px] font-light">{dateObject}</h2>
-								<button className="cursor-pointer text-white rounded-md bg-blue-500 p-[5px]" onClick={() => setOpenAdd(true)}>
+								<button type="button" className="text-white rounded-md bg-blue-500 p-[5px]" onClick={() => handleAddButtonClick(purchase)}>
 									Add
 								</button>
 							</div>
 						</Fragment>
 					);
-				})} */}
+				})}
 
-				{/* <div className="flex items-center justify-center gap-x-5 mt-5">
-					<h1 className="text-[15px] font-light">
-						<Link to={'/'}>{customerPurchases.customer_fullName}</Link>
-					</h1>
-					<h2 className="text-[15px] font-light">{customerPurchases.purchase_date}</h2>
-					<button className="cursor-pointer text-white rounded-md bg-blue-500 p-[5px]" onClick={() => setOpenAdd(true)}>
-						Add
-					</button>
-				</div> */}
-
-				{/* Open Add Product for customer */}
 				{openAdd && (
 					<div className="flex justify-center mt-5">
-						<form onSubmit={addProductByCustomerId} className="flex flex-col items-center">
-							<select className="rounded-md mb-2" onChange={(e: any) => setOptionSelect(e.target.value)}>
+						<form onSubmit={handleSubmitAddProduct} className="flex flex-col items-center">
+							<select className="rounded-md mb-2" onChange={(e: any) => setSelectedProduct({ ...selectedProduct, productId: e.target.value })}>
 								{allProducts.map((product: any, index: any) => (
 									<Fragment key={index}>
 										<option value="" hidden>
@@ -101,7 +119,7 @@ const ProductBox = ({ product, allProducts }: any) => {
 									</Fragment>
 								))}
 							</select>
-							<button type="submit" className="bg-blue-500 p-[5px] cursor-pointer text-white rounded-md mt-2">
+							<button type="submit" className="bg-blue-500 p-[5px] text-white rounded-md mt-2">
 								Save
 							</button>
 							<span onClick={() => setOpenAdd(false)} className="cursor-pointer mt-4">

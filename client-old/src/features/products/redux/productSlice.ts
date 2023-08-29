@@ -13,8 +13,13 @@ export const getAllProductsFunction = createAsyncThunk('product/getAllProducts',
 });
 
 export const getAllCustomerPurchaseByIdProductsFunction = createAsyncThunk('product/getAll', async (idProduct: number) => {
-	const response = await getAllCustomerPurchaseByIdProduct(idProduct);
-	return response;
+	try {
+		const response = await getAllCustomerPurchaseByIdProduct(idProduct);
+		// console.log('Redux: ', response.data);
+		return response;
+	} catch (e) {
+		console.log(e);
+	}
 });
 
 export const getProductById = createAsyncThunk('product/getProductById', async (idProduct: number) => {
@@ -74,6 +79,7 @@ export const productSlice = createSlice({
 			.addCase(getAllProductsFunction.fulfilled, (state: IProductState, { payload }) => {
 				state.isLoading = false;
 				state.isError = false;
+				// console.log(payload);
 				state.products = payload.data;
 			})
 
@@ -85,7 +91,9 @@ export const productSlice = createSlice({
 			.addCase(getAllCustomerPurchaseByIdProductsFunction.fulfilled, (state: IProductState, { payload }) => {
 				state.isLoading = false;
 				state.isError = false;
+				// console.log(payload);
 				state.message = payload.message;
+				// state.customer_purchases = payload.data.concat(payload.data);
 			})
 
 			// handle Get One Product by (id product)
@@ -96,7 +104,7 @@ export const productSlice = createSlice({
 			.addCase(getProductById.fulfilled, (state: IProductState, { payload }) => {
 				state.isLoading = false;
 				state.isError = false;
-				state.message = payload.message;
+				// state.message = payload.message;
 				state.oneProduct = payload.data;
 			})
 
@@ -108,7 +116,7 @@ export const productSlice = createSlice({
 			.addCase(updateProductById.fulfilled, (state: IProductState, { payload }) => {
 				state.isLoading = false;
 				state.isError = false;
-				state.message = payload.message;
+				// state.message = payload.message;
 			})
 
 			// handle Delete product by (id product)
@@ -119,7 +127,7 @@ export const productSlice = createSlice({
 			.addCase(deleteProductById.fulfilled, (state: IProductState, { payload }) => {
 				state.isLoading = false;
 				state.isError = false;
-				state.message = payload.message;
+				// state.message = payload.message;
 			})
 
 			.addMatcher(
@@ -127,7 +135,7 @@ export const productSlice = createSlice({
 				(state: IProductState, { payload }) => {
 					state.isLoading = false;
 					state.isError = true;
-					state.message = payload.message || 'Something Went Wrong In Product';
+					// state.message = payload.message || 'Something Went Wrong In Product';
 				}
 			);
 	}
@@ -135,6 +143,9 @@ export const productSlice = createSlice({
 
 export default productSlice.reducer;
 
+function concat(data: any): any[] {
+	throw new Error('Function not implemented.');
+}
 // handle get All Customer Purchase By Id Product
 // .addCase(getAllCustomerPurchaseByIdProductsFunction.pending, (state: IProductState) => {
 // 	state.isLoading = true;

@@ -1,22 +1,19 @@
-import { ReactNode, createContext, useContext, useEffect, useMemo } from 'react';
-import { useAppDispatch, useAppSelector } from '../hooks/useRedux';
-import { getCookie } from '../utils/cookies';
-import { isLoginByToken } from '../features/auth/redux/authSlice';
-import { RootState } from '../redux/store';
-// import { useLocation, useNavigate } from 'react-router-dom';
+import { createContext, useContext, useEffect, useMemo } from 'react';
+import { IUser } from '@/types/authTypes';
+import { LayoutProps } from '@/types/global';
+import { useAppDispatch, useAppSelector } from '@/hooks/useRedux';
+import { getCookie } from '@/utils/cookies';
+import { isLoginUser } from '@features/auth/redux';
+import { useLocation, useNavigate } from 'react-router-dom';
 
-type AuthContextValue = {
+interface IAuthContextValue {
+	isLoading: boolean;
 	isError: boolean;
 	isAuthenticated: boolean;
-	isLoading: boolean;
-	user: { id: number; full_name: string; username: string; email: string; role: string } | null | undefined;
-};
+	user: IUser | null | undefined;
+}
 
-type AuthContextProps = {
-	children?: ReactNode;
-};
-
-const AuthContext = createContext<AuthContextValue | null>(null);
+const AuthContext = createContext<IAuthContextValue | null>(null);
 
 export function UseAuthContext() {
 	const context = useContext(AuthContext);
@@ -26,17 +23,20 @@ export function UseAuthContext() {
 	return context;
 }
 
-export function AuthProvider({ children }: AuthContextProps) {
-	// const location = useLocation();
-	// const navigate = useNavigate();
+export default function AuthProvider({ children }: LayoutProps) {
 	const dispatch = useAppDispatch();
-	const { isAuthenticated, isLoading, user, isError } = useAppSelector((state: RootState) => state.auth);
+	const location = useLocation();
+	const navigate = useNavigate();
+	const { isAuthenticated, isLoading, user, isError } = useAppSelector(state => state.auth);
 
 	useEffect(() => {
 		if (getCookie('token')) {
-			dispatch(isLoginByToken());
+			dispatch(isLoginUser());
 		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
+
+		return () => {
+			dispatch(isLoginUser());
+		};
 	}, []);
 
 	const authContextValue = useMemo(() => ({ isAuthenticated, user, isLoading, isError }), [isAuthenticated, user, isLoading, isError]);

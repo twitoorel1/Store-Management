@@ -15,9 +15,8 @@ export interface IProductState {
 
 	// From Server
 	message: string | null;
-	total_purchases: number | null;
-	products: any[];
-	customer_purchases: any[];
+	allProducts: IProduct[];
+	productsPurchases: any[];
 	oneProduct: IProduct;
 }
 

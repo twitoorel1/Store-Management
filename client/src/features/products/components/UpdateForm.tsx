@@ -1,16 +1,7 @@
-import { FC } from 'react';
-import { RootState } from '../../../redux/store';
-import { IEditProductInputs } from '../../../types/productTypes';
-import { useAppDispatch, useAppSelector } from '../../../hooks/useRedux';
-
 import { useForm } from 'react-hook-form';
-// import { yupResolver } from '@hookform/resolvers/yup';
-import { updateProductById } from '../redux/productSlice';
+import { IEditProductInputs } from '@/types/productTypes';
 
-const UpdateForm: FC<any> = ({ idProduct }) => {
-	const dispatch = useAppDispatch();
-	const { oneProduct, isError, isLoading } = useAppSelector((state: RootState) => state.product);
-
+const UpdateForm = ({ oneProduct, onSubmitFun }: { oneProduct: any; onSubmitFun: any }) => {
 	const {
 		register,
 		handleSubmit
@@ -28,7 +19,7 @@ const UpdateForm: FC<any> = ({ idProduct }) => {
 
 	const onSubmitEditProduct = async (data: IEditProductInputs) => {
 		try {
-			await dispatch(updateProductById({ idProduct, formValues: data }));
+			await onSubmitFun(data);
 		} catch (error) {
 			console.log(error);
 		}

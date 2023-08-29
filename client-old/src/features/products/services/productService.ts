@@ -23,6 +23,13 @@ export const getAllProducts = async () => {
 export const getAllCustomerPurchaseByIdProduct = async (idProduct: number) => {
 	try {
 		const response = await api.get(`/customer/listPurchase/${idProduct}`);
+		// if (response.data.data.error) {
+		// 	console.log(response.data.data);
+		// 	throw new Error(response.data.data.message);
+		// }
+
+		// console.log('Service: ', response.data);
+
 		return response.data;
 	} catch (error: any) {
 		return Promise.reject(error.response || error.message || 'Server Error');

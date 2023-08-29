@@ -1,26 +1,25 @@
 import { Routes, Route } from 'react-router-dom';
-import LayoutAuth from './layouts/auth';
-import LayoutMain from './layouts/main';
+
+import AuthLayout from '@/layouts/auth';
+import MainLayout from '@/layouts/main';
 
 // Pages
-import Home from './pages/Home';
-import Products from './pages/products/Products';
-import EditProduct from './pages/products/EditProduct';
-import Customers from './pages/customers/Customers';
-import EditCustomer from './pages/customers/EditCustomer';
-import Purchases from './pages/purchases/Purchases';
+import Login from '@/pages/auth/Login';
+import Home from '@/pages/Home';
+import Products from '@/pages/products';
+import EditProduct from '@/pages/products/EditProduct';
+import Customers from '@/pages/customers';
+import EditCustomer from '@/pages/customers/EditCustomer';
+import Purchases from '@/pages/purchases';
+import Error404 from '@/pages/Errors/Error404';
 
-import Login from './pages/auth/Login';
-import Error404 from './pages/Errors/Error404';
-
-// import { getAllCustomerPurchaseByIdProduct } from './features/products/services/productService';
+// import { useAppSelector } from '@/hooks/useRedux';
+// const { user } = useAppSelector(state => state.auth);
 
 const App = () => {
-	// getAllCustomerPurchaseByIdProduct(5).then(data => console.log(data.data));
-
 	return (
 		<Routes>
-			<Route path="/" element={<LayoutMain />}>
+			<Route path="/" element={<MainLayout />}>
 				<Route index element={<Home />} />
 
 				<Route path="products">
@@ -36,10 +35,11 @@ const App = () => {
 				<Route path="purchases" element={<Purchases />} />
 			</Route>
 
-			<Route path="/auth" element={<LayoutAuth />}>
+			<Route path="auth" element={<AuthLayout />}>
 				<Route path="login" element={<Login />} />
 			</Route>
 
+			<Route path="403" element={<div>Error 403</div>} />
 			<Route path="*" element={<Error404 />} />
 		</Routes>
 	);

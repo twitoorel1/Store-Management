@@ -23,7 +23,7 @@ async function login(req: Request, res: Response, next: NextFunction) {
 		const accessToken = await User.login(user);
 		delete user.password;
 
-		res.status(200).json({ error: false, statusCode: 200, message: 'Login Successful', isAuthenticated: true, user, token: accessToken });
+		res.status(200).json({ error: false, message: 'Login Successful', isAuthenticated: true, user, token: accessToken });
 	} catch (error: any) {
 		if (error.name === 'ValidationError') {
 			// return res.status(400).json({ error: true, message: 'No Good Request' });
@@ -54,7 +54,7 @@ async function register(req: Request, res: Response, next: NextFunction) {
 			html: `Welcome to Store Management Service For Login <a href="http://${domainClient}/auth/login">Click Here</a>`
 		});
 
-		res.status(201).send({ error: false, statusCode: 201, message: 'Register Successful', isAuthenticated: false, user: newUser });
+		res.status(201).send({ error: false, message: 'Register Successful', isAuthenticated: false, user: newUser });
 	} catch (error: any) {
 		if (error.name === 'ValidationError') {
 			return errorHandlerYup(error, req, res, next);
@@ -73,7 +73,7 @@ async function isLogin(req: Request, res: Response, next: NextFunction) {
 		if (!token) return next(new UnauthorizeError('No token provided'));
 		const user = await User.isLogin(token, next);
 		delete user?.password;
-		res.status(200).send({ error: false, statusCode: 200, message: 'Is Login User Successful', isAuthenticated: true, user, token: user?.jwt_ac_token });
+		res.status(200).send({ error: false, message: 'Is Login User Successful', isAuthenticated: true, user, token: user?.jwt_ac_token });
 	} catch (error) {
 		console.error(error);
 		res.status(500).json({ error: true, statusCode: 500, message: 'Error From IsLogin' });
@@ -90,7 +90,7 @@ async function logout(req: Request, res: Response, next: NextFunction) {
 		const user = await User.findOneById(+userId);
 		if (!user) return next(new NotFoundError('User not found'));
 		await User.logout(+user.id, next);
-		res.status(200).send({ error: false, statusCode: 200, message: 'Logout Successful', isAuthenticated: false });
+		res.status(200).send({ error: false, message: 'Logout Successful', isAuthenticated: false });
 	} catch (error) {
 		console.error(error);
 		res.status(500).json({ error: true, statusCode: 500, message: 'Error From logout' });

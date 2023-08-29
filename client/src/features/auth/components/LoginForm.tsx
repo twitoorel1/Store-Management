@@ -1,22 +1,22 @@
-import { useForm } from 'react-hook-form';
-import { useAppDispatch, useAppSelector } from '../../../hooks/useRedux';
-import { loginUser } from '../redux/authSlice';
-import { FormLoginInputs } from '../../../types/authTypes';
-import { yupResolver } from '@hookform/resolvers/yup';
-import LoginValidation from '../validations/LoginValidation';
 import { useNavigate } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import { useAppDispatch, useAppSelector } from '@/hooks/useRedux';
+import { IFormLoginInputs } from '@/types/authTypes';
+import { yupResolver } from '@hookform/resolvers/yup';
+import LoginValidationSchema from '../validations/LoginValidation';
+import { loginUser } from '../redux';
 
 const LoginForm = () => {
 	const dispatch = useAppDispatch();
 	const navigate = useNavigate();
-	const { message, isAuthenticated } = useAppSelector(state => state.auth);
+	const { isLoading, message } = useAppSelector(state => state.auth);
 
 	const {
 		register,
 		handleSubmit,
 		formState: { errors }
-	} = useForm({
-		resolver: yupResolver(LoginValidation),
+	} = useForm<IFormLoginInputs>({
+		resolver: yupResolver(LoginValidationSchema),
 		defaultValues: {
 			username: '',
 			password: ''
@@ -25,14 +25,9 @@ const LoginForm = () => {
 		reValidateMode: 'onChange'
 	});
 
-	const onSubmitLogin = async (data: FormLoginInputs) => {
+	const onSubmitLogin = async (data: IFormLoginInputs) => {
 		try {
-			const response = await dispatch(loginUser(data));
-			setTimeout(() => {
-				if (response.meta.requestStatus === 'fulfilled') {
-					navigate('/', { replace: true });
-				}
-			}, 2000);
+			await dispatch(loginUser([data]));
 		} catch (error) {
 			console.log(error);
 		}
@@ -40,15 +35,13 @@ const LoginForm = () => {
 
 	return (
 		<form onSubmit={handleSubmit(onSubmitLogin)} className="flex flex-col items-center justify-center w-screen h-screen bg-gray-300">
-			<input className="mb-4" type="text" {...register('username')} placeholder="username" />
-			{errors.username && <p className="text-red-500">{errors.username.message}</p>}
-			<input className="mb-4" type="text" {...register('password')} placeholder="password" />
-			{errors.password && <p className="text-red-500">{errors.password.message}</p>}
+			<input type="text" placeholder="Username" className="mb-4" {...register('username')} />
+			<input type="password" placeholder="Password" className="mb-4" {...register('password')} />
 			<button type="submit" className="p-3 bg-blue-300 rounded-md">
 				Login
 			</button>
-			{isAuthenticated === false && <p>Test P</p>}
-			<p>{message}</p>
+			{isLoading ? <span>Loading...</span> : null}
+			<p className="mt-4">{message}</p>
 		</form>
 	);
 };

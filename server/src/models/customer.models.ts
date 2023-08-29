@@ -1,6 +1,7 @@
 import queryDatabase from '../database/queryDatabase';
 import { RowDataPacket } from 'mysql2/promise';
-import { generateRandomNumbers } from '../utils/randomNumbers';
+// import { generateRandomNumbers } from '../utils/randomNumbers';
+// const randomId = await generateRandomNumbers(4);
 
 const DB_NAME = 'customers';
 
@@ -18,11 +19,10 @@ interface ICustomerProps {
  */
 
 async function createOne(body: ICustomerProps) {
-	const randomId = await generateRandomNumbers(4);
-	const query = `INSERT INTO ${DB_NAME} (id, first_name, last_name, city) VALUES (?, ?, ?, ?);`;
+	const query = `INSERT INTO ${DB_NAME} (first_name, last_name, city) VALUES (?, ?, ?);`;
 
 	try {
-		const result = await queryDatabase(query, [randomId, body.first_name, body.last_name, body.city]);
+		const result = await queryDatabase(query, [body.first_name, body.last_name, body.city]);
 		return result;
 	} catch (error) {
 		console.log(error);
@@ -94,7 +94,7 @@ async function customersPurchase(productId: number) {
 		purchases.date as purchase_date FROM purchases
 		INNER JOIN customers ON purchases.customers_id = customers.id
 		INNER JOIN products ON purchases.products_id = products.id
-		WHERE products.id = ?;`;
+		WHERE products.id = ? ORDER BY purchase_date DESC;`;
 	try {
 		const result = await queryDatabase(query, [productId]);
 		if (result.length === 0) return { error: 'Not Exist Purchases for this product' };

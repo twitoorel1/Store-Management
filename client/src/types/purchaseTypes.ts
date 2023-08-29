@@ -1,3 +1,11 @@
+export interface IPurchase {
+	id: number;
+	customers_id: number;
+	products_id: number;
+	date: string;
+	updated_at: string;
+}
+
 // interface Purchase State Redux
 export interface IPurchaseState {
 	// Status
@@ -7,6 +15,12 @@ export interface IPurchaseState {
 	// From Server
 	message: string | null;
 	total_purchases: number | null;
-	products: any[];
-	customer_purchases: any[];
+	allPurchases: IPurchase[];
+	onePurchase: IPurchase;
+}
+
+export interface IEditPurchaseInputs {
+	customers_id?: number;
+	products_id?: number;
+	date?: Date;
 }

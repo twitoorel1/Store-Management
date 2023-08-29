@@ -1,7 +1,9 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { AiOutlineMenu, AiOutlineClose } from 'react-icons/ai';
+import { Link, useNavigate } from 'react-router-dom';
+import { AiOutlineMenu, AiOutlineClose, AiOutlineLogout } from 'react-icons/ai';
 import { Menu } from '@headlessui/react';
+import { useAppDispatch } from '@/hooks/useRedux';
+import { logoutUser } from '@features/auth/redux';
 
 const menuItems = [
 	{
@@ -22,16 +24,27 @@ const menuItems = [
 	}
 ];
 
-interface MenuItems {
+type MenuItems = {
 	name: string;
 	link: string;
-}
+};
 
 const Header = () => {
+	const dispatch = useAppDispatch();
+	const navigate = useNavigate();
 	const [openMenu, setOpenMenu] = useState(false);
 
+	const handleLogoutUser = async () => {
+		try {
+			await dispatch(logoutUser());
+			navigate('/auth/login');
+		} catch (error: any) {
+			console.log(error);
+		}
+	};
+
 	return (
-		<header className="flex items-center justify-between py-5 text-sm bg-cover bg-gradient-to-t from-primary-50 [5ms] px-12 relative leading-6 h-[100px]">
+		<header className="flex items-center justify-between py-5 text-sm bg-cover bg-gradient-to-t from-blue-50 [5ms] px-12 relative leading-6 h-[100px]">
 			{/* Logo */}
 			<div className="flex items-center gap-[5px] w-3/5 md:w-[45%] xl:w-2/5">
 				<span className="text-gray-900 text-xl">
@@ -52,6 +65,12 @@ const Header = () => {
 						<Link to={item.link}>{item.name}</Link>
 					</li>
 				))}
+				<li className="bg-blue-500 text-white px-4 py-2 rounded-md shadow-md hover:text-blue-500 hover:bg-white flex items-center gap-x-2">
+					<button type="submit" onClick={handleLogoutUser}>
+						Logout
+					</button>
+					<AiOutlineLogout size={20} />
+				</li>
 			</ul>
 
 			{/* Menu Phone */}

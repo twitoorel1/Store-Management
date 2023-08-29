@@ -22,7 +22,7 @@ export const getOneCustomerById = async (idCustomer: number) => {
 
 export const updateOneCustomerById = async (idCustomer: number, formValues: IEditCustomerInputs) => {
 	try {
-		const response = await api.patch(`customer/id/${idCustomer}`, formValues);
+		const response = await api.patch(`/customer/id/${idCustomer}`, formValues);
 		return response.data;
 	} catch (error: any) {
 		return Promise.reject(error.response || error.message || 'Server Error');

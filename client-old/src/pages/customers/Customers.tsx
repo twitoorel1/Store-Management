@@ -7,10 +7,10 @@ import { RootState } from '../../redux/store';
 const Customers = () => {
 	const dispatch = useAppDispatch();
 	const { customers, isLoading, isError } = useAppSelector((state: RootState) => state.customer);
-
+	// tst1
 	useEffect(() => {
 		dispatch(getAllCustomersFunction());
-	}, [dispatch]);
+	}, []);
 
 	if (isLoading) {
 		return <div>Loading...</div>;

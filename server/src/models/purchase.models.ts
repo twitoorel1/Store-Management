@@ -1,6 +1,7 @@
 import queryDatabase from '../database/queryDatabase';
 import { RowDataPacket } from 'mysql2/promise';
-import { generateRandomNumbers } from '../utils/randomNumbers';
+// import { generateRandomNumbers } from '../utils/randomNumbers';
+// const randomId = await generateRandomNumbers(5);
 
 const DB_NAME = 'purchases';
 
@@ -19,16 +20,17 @@ interface IPurchaseProps {
 
 /* Mission 2-Area-2 - Add Button */
 async function createOne(body: IPurchaseProps) {
-	const randomId = await generateRandomNumbers(5);
 	const query = `SELECT quantity FROM products WHERE id = ?;`;
-	const query2 = `INSERT INTO ${DB_NAME} (id, customers_id, products_id) VALUES (?, ?, ?);`;
+	const query2 = `INSERT INTO ${DB_NAME} (customers_id, products_id) VALUES (?, ?);`;
 	const query3 = `UPDATE products SET quantity = quantity - 1 WHERE id = ?;`;
 
 	try {
 		const resultStock = await queryDatabase(query, [body.products_id]);
-		if (resultStock[0].quantity === 0) return { error: 'Not enough products in stock' };
-		await Promise.all([queryDatabase(query2, [randomId, body.customers_id, body.products_id]), queryDatabase(query3, [body.products_id])]);
-		return true;
+		// if (resultStock[0].quantity === 0) return { error: 'Not enough products in stock' };
+		console.log(resultStock[0].quantity);
+		if (resultStock[0].quantity <= 0) return 'Not enough products in stock';
+		await Promise.all([queryDatabase(query2, [body.customers_id, body.products_id]), queryDatabase(query3, [body.products_id])]);
+		return 'Purchase Created Successfully';
 	} catch (error) {
 		console.log(error);
 		throw error;

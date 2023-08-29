@@ -16,8 +16,8 @@ interface ApiResponse<T> {
 }
 
 interface ApiError {
-	error: boolean;
-	message: string;
+	error?: boolean;
+	message?: string;
 	stack?: string;
 }
 
@@ -27,7 +27,7 @@ function handleApiResponse<T>(response: ApiResponse<T>) {
 }
 
 // define a helper function to handle error message
-function handleApiError(error: ApiError) {
+function handleApiError(error: ApiError | any) {
 	console.error(error.message);
 }
 

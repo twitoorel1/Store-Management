@@ -10,7 +10,8 @@ async function createOne(req: Request, res: Response, next: NextFunction) {
 		await createOnePurchaseSchema.validate(req.body, { abortEarly: false });
 		const newPurchase = await Purchase.createOne(req.body);
 
-		res.status(201).send({ error: false, message: 'Purchase Created Successfully', data: newPurchase });
+		// console.log(newPurchase);
+		res.status(201).send({ error: false, message: newPurchase });
 	} catch (error: any) {
 		if (error.name === 'ValidationError') {
 			return errorHandlerYup(error, req, res, next);
@@ -37,7 +38,7 @@ async function getOneById(req: Request, res: Response, next: NextFunction) {
 	try {
 		const purchaseById = await Purchase.getOneById(+req.params.id);
 		if (purchaseById === null) return next(new NotFoundError('Purchase not found'));
-		res.status(200).send({ error: false, message: `Get One Id Purchase: ${req.params.id} Successfully`, data: purchaseById });
+		res.status(200).send({ error: false, message: 'Get One Id Purchase Successfully', data: purchaseById });
 	} catch (error) {
 		console.error(error);
 		res.status(500).json({ error: 'Error From Get One By Id - Purchase' });

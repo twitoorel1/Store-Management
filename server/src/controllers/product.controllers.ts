@@ -37,7 +37,7 @@ async function getOneById(req: Request, res: Response, next: NextFunction) {
 	try {
 		const productById = await Product.getOneById(+req.params.id);
 		if (productById === null) return next(new NotFoundError('Product not found'));
-		res.status(200).send({ error: false, message: `Get One Id Product: ${req.params.id} Successfully`, data: productById });
+		res.status(200).send({ error: false, message: 'Get One Id Product Successfully', data: productById });
 	} catch (error) {
 		console.error(error);
 		res.status(500).json({ error: 'Error From Get One By Id - Product' });
@@ -72,12 +72,13 @@ async function updateOneById(req: Request, res: Response, next: NextFunction) {
 	}
 }
 
-// Get All products purchased by (id customer)
+// Get All Product Purchased By Customer Id (id customer)
+// Response = product_name, purchase_date
 async function productsPurchase(req: Request, res: Response, next: NextFunction) {
 	try {
 		const listProducts = await Product.productsPurchase(+req.params.customerId);
 		if (listProducts === null) return next(new NotFoundError('Products not found'));
-		res.status(200).send({ error: false, message: `Get All products purchased By (id customer) = ${req.params.customerId} Successfully`, data: listProducts });
+		res.status(200).send({ error: false, message: 'Get All products purchased By (id customer) Successfully', data: listProducts });
 	} catch (error) {
 		console.error(error);
 		res.status(500).json({ error: 'Error From Get All - Product' });
