@@ -7,6 +7,8 @@ Full Stack Project Store Management
 ReactJs
 Redux Toolkit
 Axios
+Tailwind Css
+
 
 ### Server Side - Typescript:
 NodeJs
