@@ -12,7 +12,7 @@ interface ProductPurchaseProps {
 	purchase_date: '2023-08-24T17:37:46.000Z';
 }
 
-const CustomerBox = ({ customer, allCustomers }: { customer: any; allCustomers: any }) => {
+const CustomerBox = ({ customer }: { customer: any }) => {
 	const dispatch = useAppDispatch();
 	const [openBuyNow, setOpenBuyNow] = useState(false);
 	const [selectedProduct, setSelectedProduct] = useState({ productId: '', customerId: '' });
@@ -26,23 +26,19 @@ const CustomerBox = ({ customer, allCustomers }: { customer: any; allCustomers: 
 		dispatch(getAllProductsPurchaseByCustomerIdFunction([customer.id]));
 
 		return () => {
-			dispatch(clearProductsPurchases([]));
+			dispatch(clearProductsPurchases());
 		};
 	}, [dispatch, customer.id]);
 
 	const handleAddProductByCustomerId = async (e: any) => {
 		e.preventDefault();
-
 		const data = {
 			products_id: selectedProduct,
 			customers_id: customer.id
 		};
-
 		await dispatch(createOneFunction([data]));
-
 		// console.log('Id Product: ' + selectedProduct);
 		// console.log('Id Customer: ' + customer.id);
-
 		setTimeout(() => {
 			setOpenBuyNow(false);
 		}, 500);

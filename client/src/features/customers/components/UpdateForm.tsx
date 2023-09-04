@@ -7,7 +7,6 @@ const UpdateForm = ({ oneCustomer, onSubmitFun }: { oneCustomer: any; onSubmitFu
 		handleSubmit
 		// formState: { errors }
 	} = useForm<IEditCustomerInputs>({
-		// resolver: yupResolver(LoginValidation),
 		defaultValues: {
 			first_name: oneCustomer.first_name,
 			last_name: oneCustomer.last_name,

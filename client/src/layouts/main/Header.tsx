@@ -37,7 +37,7 @@ const Header = () => {
 	const handleLogoutUser = async () => {
 		try {
 			await dispatch(logoutUser());
-			navigate('/auth/login');
+			navigate('/auth/login', { replace: true });
 		} catch (error: any) {
 			console.log(error);
 		}
@@ -95,7 +95,7 @@ const Header = () => {
 							</span>
 						</div>
 						{menuItems.map((item: MenuItems, index: number) => (
-							<Menu.Item as="li" className="group py-2 px-2 w-full text-base font-semibold text-center border-black">
+							<Menu.Item as="li" key={index} className="group py-2 px-2 w-full text-base font-semibold text-center border-black">
 								<Link to={item.link} className="text-center rounded-md cursor-pointer font-bold text-[17px] border-black py-2.5 px-[25px] bg-gradient-to-t bg-gray-100 bg-cover flex justify-center items-center">
 									{item.name}
 								</Link>

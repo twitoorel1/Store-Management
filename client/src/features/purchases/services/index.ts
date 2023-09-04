@@ -1,7 +1,5 @@
 import { api } from '@/utils/api';
 
-// customers_id
-// products_id
 export const createOne = async ([data]: any) => {
 	try {
 		const response = await api.post('/purchase', data);

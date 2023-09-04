@@ -3,7 +3,6 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '@/hooks/useRedux';
 import { IEditProductInputs } from '@/types/productTypes';
 import { getByIdFunction, deleteByIdFunction, updateByIdFunction } from '@features/products/redux';
-
 import CustomerBox from '@features/products/components/CustomerBox';
 import UpdateForm from '@features/products/components/UpdateForm';
 import { clearCustomersPurchases, getAllCustomersPurchasedByProductIdFunction } from '@/features/customers/redux';

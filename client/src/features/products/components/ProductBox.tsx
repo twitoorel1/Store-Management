@@ -25,7 +25,7 @@ const ProductBox = ({ product, allProducts }: { product: IProduct; allProducts: 
 		dispatch(getAllCustomersPurchasedByProductIdFunction([product.id]));
 
 		return () => {
-			dispatch(clearCustomersPurchases([]));
+			dispatch(clearCustomersPurchases());
 		};
 	}, [dispatch, product.id]);
 
@@ -41,12 +41,9 @@ const ProductBox = ({ product, allProducts }: { product: IProduct; allProducts: 
 			products_id: selectedProduct.productId,
 			customers_id: selectedProduct.customerId
 		};
-
 		await dispatch(createOneFunction([data]));
-
 		// console.log('Id Product: ' + selectedProduct.productId);
 		// console.log('Id Customer: ' + selectedProduct.customerId);
-
 		setTimeout(() => {
 			setOpenAdd(false);
 		}, 500);

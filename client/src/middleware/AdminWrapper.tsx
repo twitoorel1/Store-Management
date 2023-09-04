@@ -12,7 +12,7 @@ const AdminWrapper: React.FC<IAdminWrapperProps> = ({ children }) => {
 
 	useEffect(() => {
 		if (user?.role !== 'admin') {
-			navigate('/403');
+			navigate('/403', { replace: true });
 			return;
 		}
 	}, [user?.role, navigate]);

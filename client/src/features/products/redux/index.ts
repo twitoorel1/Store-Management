@@ -1,4 +1,4 @@
-import { createSlice, Action, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, Action } from '@reduxjs/toolkit';
 import { IProductState } from '@/types/productTypes';
 import { getAll, getById, updateById, deleteById, getAllProductsPurchaseByCustomerId } from '../services/index';
 import { createDynamicAsyncThunk } from '@/utils/redux';
@@ -30,7 +30,7 @@ export const productSlice = createSlice({
 	name: 'product',
 	initialState,
 	reducers: {
-		clearProductsPurchases: (state, action: PayloadAction<any[]>) => {
+		clearProductsPurchases: state => {
 			state.productsPurchases = [];
 		}
 	},

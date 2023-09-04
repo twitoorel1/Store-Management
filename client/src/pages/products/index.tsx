@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { FaRegMoneyBillAlt } from 'react-icons/fa';
 import { getAllFunction } from '@features/products/redux';
 import { getTotalPurchasesFunction } from '@features/purchases/redux';

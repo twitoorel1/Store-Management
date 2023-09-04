@@ -33,7 +33,7 @@ export const customerSlice = createSlice({
 		addCustomersPurchases: (state, action: PayloadAction<any[]>) => {
 			state.customersPurchases = combineItemsToArray(state.customersPurchases, ...action.payload);
 		},
-		clearCustomersPurchases: (state, action: PayloadAction<any[]>) => {
+		clearCustomersPurchases: state => {
 			state.customersPurchases = [];
 		}
 	},

@@ -14,7 +14,7 @@ const index = () => {
 
 	useEffect(() => {
 		if (isAuthenticated && user) {
-			navigate('/');
+			navigate('/', { replace: true });
 		}
 	}, [navigate, isAuthenticated, user]);
 

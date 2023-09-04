@@ -1,4 +1,3 @@
-import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useAppDispatch, useAppSelector } from '@/hooks/useRedux';
 import { IFormLoginInputs } from '@/types/authTypes';
@@ -8,7 +7,6 @@ import { loginUser } from '../redux';
 
 const LoginForm = () => {
 	const dispatch = useAppDispatch();
-	const navigate = useNavigate();
 	const { isLoading, message } = useAppSelector(state => state.auth);
 
 	const {
