@@ -1,15 +1,14 @@
 import { NextFunction, Request, Response } from 'express';
-import Customer from '../models/customer.models';
-import errorHandlerYup from '../errors/errorHandlerYup';
-import errorHandler from '../errors/errorHandler';
 import { NotFoundError } from '../errors/Errors';
+import errorHandler from '../errors/errorHandler';
+import errorHandlerYup from '../errors/errorHandlerYup';
 import { createOneCustomerSchema, updateOneCustomerByIdSchema } from '../validators/validateBody.schema';
+import Customer from '../models/customer.models';
 
 async function createOne(req: Request, res: Response, next: NextFunction) {
 	try {
 		await createOneCustomerSchema.validate(req.body, { abortEarly: false });
 		const newCustomer = await Customer.createOne(req.body);
-
 		res.status(201).send({ error: false, message: 'Customer Created Successfully', data: newCustomer });
 	} catch (error: any) {
 		if (error.name === 'ValidationError') {
@@ -25,8 +24,7 @@ async function createOne(req: Request, res: Response, next: NextFunction) {
 async function getAll(req: Request, res: Response, next: NextFunction) {
 	try {
 		const customers = await Customer.getAll();
-		if (customers === null) return next(new NotFoundError('Customers not found'));
-
+		if (customers === null) return next(new NotFoundError('Customers not exist'));
 		res.status(200).send({ error: false, message: 'Get All Customers Successfully', data: customers });
 	} catch (error) {
 		console.error(error);
@@ -37,8 +35,7 @@ async function getAll(req: Request, res: Response, next: NextFunction) {
 async function getOneById(req: Request, res: Response, next: NextFunction) {
 	try {
 		const customerById = await Customer.getOneById(+req.params.id);
-		if (customerById === null) return next(new NotFoundError('Customer not found'));
-
+		if (customerById === null) return next(new NotFoundError('Customer not exist'));
 		res.status(200).send({ error: false, message: 'Get One Id Customer Successfully', data: customerById });
 	} catch (error) {
 		console.error(error);
@@ -50,7 +47,6 @@ async function deleteOneById(req: Request, res: Response, next: NextFunction) {
 	try {
 		const deleteOne = await Customer.deleteOneById(+req.params.id);
 		if (deleteOne.affectedRows === 0) return next(new NotFoundError('Customer not found'));
-
 		res.status(200).send({ error: false, message: 'Customer Deleted Successfully', data: deleteOne });
 	} catch (error) {
 		console.error(error);
@@ -63,7 +59,6 @@ async function updateOneById(req: Request, res: Response, next: NextFunction) {
 		await updateOneCustomerByIdSchema.validate(req.body, { abortEarly: false });
 		const updateOne = await Customer.updateOneById(+req.params.id, req.body);
 		if (updateOne.affectedRows === 0) return next(new NotFoundError('Customer not found'));
-
 		res.status(200).send({ error: false, message: 'Customer Updated Successfully', data: updateOne });
 	} catch (error: any) {
 		if (error.name === 'ValidationError') {

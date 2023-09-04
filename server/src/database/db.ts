@@ -18,6 +18,7 @@ const pool: Pool = mysql2.createPool({
 
 export async function connectToDatabase() {
 	let connection: PoolConnection | undefined;
+
 	try {
 		connection = await pool.getConnection();
 		console.log('Successfully obtained a connection from the pool!');

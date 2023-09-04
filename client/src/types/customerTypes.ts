@@ -25,5 +25,3 @@ export interface IEditCustomerInputs {
 	last_name?: string;
 	city?: string;
 }
-
-// Get All Customers Purchased Product By Id Product (id product)

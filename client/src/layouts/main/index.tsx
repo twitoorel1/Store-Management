@@ -10,29 +10,19 @@ const index = () => {
 
 	return (
 		<>
-			<Header />
-			<main className="mb-24">
-				<Outlet />
-			</main>
-			<Footer />
+			{isLoading ? (
+				<Loader />
+			) : (
+				<>
+					<Header />
+					<main className="mb-24">
+						<Outlet />
+					</main>
+					<Footer />
+				</>
+			)}
 		</>
 	);
-
-	// return (
-	// 	<>
-	// 		{isLoading ? (
-	// 			<Loader />
-	// 		) : (
-	// 			<>
-	// 				<Header />
-	// 				<main className="mb-24">
-	// 					<Outlet />
-	// 				</main>
-	// 				<Footer />
-	// 			</>
-	// 		)}
-	// 	</>
-	// );
 };
 
 export default index;

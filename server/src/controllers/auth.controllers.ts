@@ -1,12 +1,12 @@
 import { NextFunction, Request, Response } from 'express';
+import bcrypt from 'bcrypt';
+import config from 'config';
 import { NotFoundError, UnauthorizeError } from '../errors/Errors';
-import errorHandlerYup from '../errors/errorHandlerYup';
 import errorHandler from '../errors/errorHandler';
+import errorHandlerYup from '../errors/errorHandlerYup';
 import { loginRequestSchema, registerRequestSchema } from '../validators/authRequests.schema';
 import User from '../models/user.models';
-import bcrypt from 'bcrypt';
-import { sendEmail } from '../services/sendEmail.services';
-import config from 'config';
+import { sendEmail, ISendEmailSettings } from '../services/sendEmail.services';
 
 async function login(req: Request, res: Response, next: NextFunction) {
 	try {
@@ -18,15 +18,13 @@ async function login(req: Request, res: Response, next: NextFunction) {
 		delete user.jwt_ac_token;
 
 		const isMatch = await bcrypt.compare(password, user.password);
-		if (!isMatch) return next(new NotFoundError('Something went wrong'));
+		if (!isMatch) return next(new NotFoundError('something went wrong'));
 
-		const accessToken = await User.login(user);
+		const userAccessToken = await User.login(user);
 		delete user.password;
-
-		res.status(200).json({ error: false, message: 'Login Successful', isAuthenticated: true, user, token: accessToken });
+		res.status(200).json({ error: false, message: 'Login Successful', isAuthenticated: true, user, token: userAccessToken });
 	} catch (error: any) {
 		if (error.name === 'ValidationError') {
-			// return res.status(400).json({ error: true, message: 'No Good Request' });
 			errorHandlerYup(error, req, res, next);
 		}
 		if (error.name) {
@@ -42,18 +40,16 @@ async function register(req: Request, res: Response, next: NextFunction) {
 		const { username } = req.body;
 
 		const user = await User.findOne(username);
-		if (user) return next(new NotFoundError('User already exists'));
-
+		if (user) return next(new NotFoundError('Username is already exists'));
 		const newUser = await User.register(req.body);
 
-		let domainClient = config.get('domain_client');
+		let emailService = config.get<ISendEmailSettings>('emailService');
 		await sendEmail({
-			from: 'twitoorel1@gmail.com',
+			from: emailService.auth.user,
 			to: newUser.email,
-			subject: 'New User Registered',
-			html: `Welcome to Store Management Service For Login <a href="http://${domainClient}/auth/login">Click Here</a>`
+			subject: 'Account Created',
+			html: `Hello ${newUser.username}, your account has been created successfully. Please login to your account to continue.`
 		});
-
 		res.status(201).send({ error: false, message: 'Register Successful', isAuthenticated: false, user: newUser });
 	} catch (error: any) {
 		if (error.name === 'ValidationError') {

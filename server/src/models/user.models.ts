@@ -9,13 +9,6 @@ import { IUser } from '../types/global';
 
 const DB_NAME = 'users';
 
-// interface IUserProps {
-// 	full_name: 'string';
-// 	username: 'string';
-// 	email: 'string';
-// 	password: 'string';
-// }
-
 async function findOneById(id: number) {
 	const query = `SELECT * FROM ${DB_NAME} WHERE id = ?;`;
 	try {
@@ -61,7 +54,6 @@ async function register(body: IUser) {
 
 	try {
 		const hashedPassword = await bcrypt.hash(body.password, 10);
-		console.log(hashedPassword);
 		return await queryDatabase(query, [body.full_name, body.username, body.email, hashedPassword]);
 	} catch (error) {
 		console.log(error);
@@ -93,7 +85,7 @@ async function logout(id: number, next: NextFunction) {
 	}
 }
 
-const userModel = {
+export default {
 	findOne,
 	findOneById,
 	login,
@@ -101,4 +93,3 @@ const userModel = {
 	isLogin,
 	logout
 };
-export default userModel;

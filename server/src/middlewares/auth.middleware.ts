@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
-import { verifyAccessToken } from '../services/jwt.services';
-import { ServerError, UnauthorizeError } from '../errors/Errors';
 import { JsonWebTokenError } from 'jsonwebtoken';
+import { ServerError, UnauthorizeError } from '../errors/Errors';
+import { verifyAccessToken } from '../services/jwt.services';
 
 export const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
 	const authHeader = req.headers['authorization'];

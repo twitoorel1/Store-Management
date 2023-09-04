@@ -4,7 +4,7 @@ import { LayoutProps } from '@/types/global';
 import { useAppDispatch, useAppSelector } from '@/hooks/useRedux';
 import { getCookie } from '@/utils/cookies';
 import { isLoginUser } from '@features/auth/redux';
-import { useLocation, useNavigate } from 'react-router-dom';
+// import { useLocation, useNavigate } from 'react-router-dom';
 
 interface IAuthContextValue {
 	isLoading: boolean;
@@ -25,8 +25,8 @@ export function UseAuthContext() {
 
 export default function AuthProvider({ children }: LayoutProps) {
 	const dispatch = useAppDispatch();
-	const location = useLocation();
-	const navigate = useNavigate();
+	// const location = useLocation();
+	// const navigate = useNavigate();
 	const { isAuthenticated, isLoading, user, isError } = useAppSelector(state => state.auth);
 
 	useEffect(() => {

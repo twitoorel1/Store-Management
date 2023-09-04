@@ -9,8 +9,6 @@ async function createOne(req: Request, res: Response, next: NextFunction) {
 	try {
 		await createOnePurchaseSchema.validate(req.body, { abortEarly: false });
 		const newPurchase = await Purchase.createOne(req.body);
-
-		// console.log(newPurchase);
 		res.status(201).send({ error: false, message: newPurchase });
 	} catch (error: any) {
 		if (error.name === 'ValidationError') {
@@ -83,11 +81,24 @@ async function totalPurchase(req: Request, res: Response, next: NextFunction) {
 	}
 }
 
+async function getAllPurchasesByUserId(req: Request, res: Response, next: NextFunction) {
+	try {
+		const allPurchases = await Purchase.getAll();
+		const getAllById = allPurchases.filter((purchase: any) => purchase.customers_id === +req.params.userId);
+		if (getAllById.length === 0) return next(new NotFoundError('Purchases not found'));
+		res.status(200).send({ error: false, message: 'Get All Purchases By User ID Successfully', data: getAllById });
+	} catch (error) {
+		console.error(error);
+		res.status(500).json({ error: 'Error From Get All Purchases By User Id - Purchase' });
+	}
+}
+
 export default {
 	getAll,
 	createOne,
 	getOneById,
 	deleteOneById,
 	updateOneById,
-	totalPurchase
+	totalPurchase,
+	getAllPurchasesByUserId
 };

@@ -1,7 +1,5 @@
 import queryDatabase from '../database/queryDatabase';
 import { RowDataPacket } from 'mysql2/promise';
-// import { generateRandomNumbers } from '../utils/randomNumbers';
-// const randomId = await generateRandomNumbers(4);
 
 const DB_NAME = 'customers';
 
@@ -13,7 +11,7 @@ interface ICustomerProps {
 
 /* CRUD
  * Create - createOne
- * Read - getAll, getById
+ * Read - getAll, getById, customersPurchase
  * Update - updateById
  * Delete - deleteById
  */
@@ -56,7 +54,6 @@ async function getOneById(id: number) {
 	}
 }
 
-/* Mission 4-Area-1 */
 async function deleteOneById(customerId: number) {
 	const query = `DELETE FROM purchases WHERE customers_id = ?;`;
 	const query2 = `DELETE FROM ${DB_NAME} WHERE id = ?;`;
@@ -87,18 +84,16 @@ async function updateOneById(id: number, body: ICustomerProps) {
 	}
 }
 
-/* Mission 2-Area-2 & Mission 3-Area-2 */
 async function customersPurchase(productId: number) {
 	const query = `SELECT products.id as product_id, customers.id as customer_id,
 		concat(customers.first_name, ' ', customers.last_name) as customer_fullName,
 		purchases.date as purchase_date FROM purchases
-		INNER JOIN customers ON purchases.customers_id = customers.id
+		INNER JOIN ${DB_NAME} ON purchases.customers_id = customers.id
 		INNER JOIN products ON purchases.products_id = products.id
 		WHERE products.id = ? ORDER BY purchase_date DESC;`;
 	try {
 		const result = await queryDatabase(query, [productId]);
 		if (result.length === 0) return { error: 'Not Exist Purchases for this product' };
-
 		// const rows = result as RowDataPacket[];
 		// if (rows.length === 1) return rows[0];
 		return result;
@@ -108,7 +103,7 @@ async function customersPurchase(productId: number) {
 	}
 }
 
-const CustomerModel = {
+export default {
 	getAll,
 	getOneById,
 	createOne,
@@ -116,4 +111,3 @@ const CustomerModel = {
 	updateOneById,
 	customersPurchase
 };
-export default CustomerModel;

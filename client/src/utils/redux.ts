@@ -26,21 +26,3 @@ export const createDynamicAsyncThunk = <ReturnedType>(name: string, thunkFunctio
 		}
 	});
 };
-
-// export const createDynamicAsyncThunk = <ReturnedType>(name: string, thunkFunction: (...args: any[]) => Promise<ReturnedType>, shouldSendParams: boolean) => {
-// 	return createAsyncThunk(name, async (args: any[] | undefined, thunkAPI) => {
-// 		try {
-// 			let response;
-
-// 			if (shouldSendParams) {
-// 				response = await performAsyncFunction(thunkFunction, args);
-// 			} else {
-// 				response = await performAsyncFunction(thunkFunction);
-// 			}
-
-// 			return response;
-// 		} catch (error: any) {
-// 			return thunkAPI.rejectWithValue(error);
-// 		}
-// 	});
-// };

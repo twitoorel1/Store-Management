@@ -2,6 +2,7 @@ import express from 'express';
 import catchAsyncError from '../errors/catchAsyncError';
 import authController from '../controllers/auth.controllers';
 import { authMiddleware } from '../middlewares/auth.middleware';
+
 const router = express.Router();
 
 router.post('/login', catchAsyncError(authController.login));

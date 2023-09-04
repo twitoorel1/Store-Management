@@ -1,4 +1,5 @@
 import nodemailer, { Transporter, SendMailOptions } from 'nodemailer';
+import config from 'config';
 
 interface ISendEmail {
 	from: string | undefined;
@@ -7,14 +8,24 @@ interface ISendEmail {
 	html: string;
 }
 
+export interface ISendEmailSettings {
+	host: string | undefined;
+	port: number | undefined;
+	auth: {
+		user: string | undefined;
+		pass: string | undefined;
+	};
+}
+
 export const sendEmail = async (email: ISendEmail) => {
+	let emailService = config.get<ISendEmailSettings>('emailService');
 	const transporter: Transporter = nodemailer.createTransport({
-		host: 'c7.vangus.io',
-		port: 587,
+		host: emailService.host,
+		port: emailService.port,
 		secure: false,
 		auth: {
-			user: process.env.EMAIL_USER,
-			pass: process.env.EMAIL_PASS
+			user: emailService.auth.user,
+			pass: emailService.auth.pass
 		},
 		tls: {
 			rejectUnauthorized: false
@@ -22,6 +33,5 @@ export const sendEmail = async (email: ISendEmail) => {
 	});
 
 	const mailOptions = { from: email.from, to: email.to, subject: email.subject, html: email.html };
-
 	return await transporter.sendMail(mailOptions as SendMailOptions);
 };

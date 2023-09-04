@@ -1,7 +1,5 @@
 import queryDatabase from '../database/queryDatabase';
 import { RowDataPacket } from 'mysql2/promise';
-// import { generateRandomNumbers } from '../utils/randomNumbers';
-// const randomId = await generateRandomNumbers(5);
 
 const DB_NAME = 'products';
 
@@ -56,7 +54,6 @@ async function getOneById(id: number) {
 	}
 }
 
-/* Mission 3-Area-1 */
 async function deleteOneById(productId: number) {
 	const query = `DELETE FROM purchases WHERE products_id = ?;`;
 	const query2 = `DELETE FROM ${DB_NAME} WHERE id = ?;`;
@@ -87,18 +84,16 @@ async function updateOneById(id: number, body: IProductProps) {
 	}
 }
 
-/* Mission 4-Area-2  */
 async function productsPurchase(customerId: number) {
 	const query = `SELECT products.id as product_id, customers.id as customer_id,
 		products.name as product_name,
 		purchases.date as purchase_date FROM purchases
 		INNER JOIN customers ON purchases.customers_id = customers.id
-		INNER JOIN products ON purchases.products_id = products.id
+		INNER JOIN ${DB_NAME} ON purchases.products_id = products.id
 		WHERE customers.id = ? ORDER BY purchase_date DESC;`;
 	try {
 		const result = await queryDatabase(query, [customerId]);
 		if (result.length === 0) return { error: 'Not Exist Purchases for this product' };
-
 		// const rows = result as RowDataPacket[];
 		// if (rows.length === 1) return rows[0];
 		return result;
@@ -108,7 +103,7 @@ async function productsPurchase(customerId: number) {
 	}
 }
 
-const ProductModel = {
+export default {
 	getAll,
 	getOneById,
 	createOne,
@@ -116,4 +111,3 @@ const ProductModel = {
 	updateOneById,
 	productsPurchase
 };
-export default ProductModel;

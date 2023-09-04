@@ -1,15 +1,14 @@
 import { NextFunction, Request, Response } from 'express';
-import Product from '../models/product.models';
-import errorHandlerYup from '../errors/errorHandlerYup';
-import errorHandler from '../errors/errorHandler';
 import { NotFoundError } from '../errors/Errors';
+import errorHandler from '../errors/errorHandler';
+import errorHandlerYup from '../errors/errorHandlerYup';
 import { createOneProductSchema, updateOneProductByIdSchema } from '../validators/validateBody.schema';
+import Product from '../models/product.models';
 
 async function createOne(req: Request, res: Response, next: NextFunction) {
 	try {
 		await createOneProductSchema.validate(req.body, { abortEarly: false });
 		const newProduct = await Product.createOne(req.body);
-
 		res.status(201).send({ error: false, message: 'Product Created Successfully', data: newProduct });
 	} catch (error: any) {
 		if (error.name === 'ValidationError') {
@@ -25,7 +24,7 @@ async function createOne(req: Request, res: Response, next: NextFunction) {
 async function getAll(req: Request, res: Response, next: NextFunction) {
 	try {
 		const products = await Product.getAll();
-		if (products === null) return next(new NotFoundError('Products not found'));
+		if (products === null) return next(new NotFoundError('Customers not exist'));
 		res.status(200).send({ error: false, message: 'Get All Products Successfully', data: products });
 	} catch (error) {
 		console.error(error);
@@ -36,7 +35,7 @@ async function getAll(req: Request, res: Response, next: NextFunction) {
 async function getOneById(req: Request, res: Response, next: NextFunction) {
 	try {
 		const productById = await Product.getOneById(+req.params.id);
-		if (productById === null) return next(new NotFoundError('Product not found'));
+		if (productById === null) return next(new NotFoundError('Product not exist'));
 		res.status(200).send({ error: false, message: 'Get One Id Product Successfully', data: productById });
 	} catch (error) {
 		console.error(error);

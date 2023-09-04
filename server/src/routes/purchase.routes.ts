@@ -17,5 +17,6 @@ router
 router.get('/totalPurchase', catchAsyncError(purchaseController.totalPurchase));
 
 // Make Route For Get All Purchases By User Id
+router.get('/user/:userId', catchAsyncError(purchaseController.getAllPurchasesByUserId));
 
 export default router;

@@ -1,7 +1,5 @@
 import queryDatabase from '../database/queryDatabase';
 import { RowDataPacket } from 'mysql2/promise';
-// import { generateRandomNumbers } from '../utils/randomNumbers';
-// const randomId = await generateRandomNumbers(5);
 
 const DB_NAME = 'purchases';
 
@@ -18,7 +16,6 @@ interface IPurchaseProps {
  * Delete - deleteById
  */
 
-/* Mission 2-Area-2 - Add Button */
 async function createOne(body: IPurchaseProps) {
 	const query = `SELECT quantity FROM products WHERE id = ?;`;
 	const query2 = `INSERT INTO ${DB_NAME} (customers_id, products_id) VALUES (?, ?);`;
@@ -26,8 +23,6 @@ async function createOne(body: IPurchaseProps) {
 
 	try {
 		const resultStock = await queryDatabase(query, [body.products_id]);
-		// if (resultStock[0].quantity === 0) return { error: 'Not enough products in stock' };
-		console.log(resultStock[0].quantity);
 		if (resultStock[0].quantity <= 0) return 'Not enough products in stock';
 		await Promise.all([queryDatabase(query2, [body.customers_id, body.products_id]), queryDatabase(query3, [body.products_id])]);
 		return 'Purchase Created Successfully';
@@ -43,7 +38,6 @@ async function getAll() {
 	try {
 		const result = await queryDatabase(query);
 		if (result.length === 0) return { error: 'Not Exist Purchases for this product' };
-
 		const rows = result as RowDataPacket[];
 		if (rows.length === 1) return rows[0];
 		return result;
@@ -95,10 +89,9 @@ async function updateOneById(id: number, body: IPurchaseProps) {
 	}
 }
 
-/* Mission 2-Area-1 */
 async function totalPurchase() {
-	// const query = `SELECT COUNT(*) as total FROM ${DB_NAME};`; /* total orders number */
-	const query = `SELECT sum(price) as total_purchases FROM purchases INNER JOIN products ON purchases.products_id = products.id`; /* total orders price */
+	// const query = `SELECT COUNT(*) as total FROM ${DB_NAME};`; /* Summary of total orders number */
+	const query = `SELECT SUM(price) as total_purchases FROM purchases INNER JOIN products ON purchases.products_id = products.id`; /* Summary of total orders price */
 
 	try {
 		const result = await queryDatabase(query);
@@ -109,7 +102,7 @@ async function totalPurchase() {
 	}
 }
 
-const PurchaseModel = {
+export default {
 	getAll,
 	getOneById,
 	createOne,
@@ -117,4 +110,3 @@ const PurchaseModel = {
 	updateOneById,
 	totalPurchase
 };
-export default PurchaseModel;

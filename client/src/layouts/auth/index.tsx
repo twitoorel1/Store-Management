@@ -18,30 +18,18 @@ const index = () => {
 		}
 	}, [navigate, isAuthenticated, user]);
 
-	// return (
-	// 	<>
-	// 		{isLoading ? (
-	// 			<Loader />
-	// 		) : (
-	// 			<>
-	// 				<Header />
-	// 				<main>
-	// 					<Outlet />
-	// 				</main>
-	// 			</>
-	// 		)}
-	// 	</>
-	// );
-
 	return (
 		<>
-			<Header />
-			<main>
-				<Outlet />
-			</main>
-			{/* <main className="mb-24">
-				<Outlet />
-			</main> */}
+			{isLoading ? (
+				<Loader />
+			) : (
+				<>
+					<Header />
+					<main>
+						<Outlet />
+					</main>
+				</>
+			)}
 		</>
 	);
 };

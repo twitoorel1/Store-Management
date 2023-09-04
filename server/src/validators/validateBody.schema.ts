@@ -10,7 +10,7 @@ export const createOneProductSchema = yup.object().shape({
 export const updateOneProductByIdSchema = yup.object().shape({
 	name: yup.string(),
 	price: yup.number().min(100, 'price must be greater than 100'),
-	quantity: yup.string()
+	quantity: yup.string().min(1, 'quantity must be greater than 1')
 });
 
 // Customer Model
