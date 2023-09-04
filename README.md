@@ -50,16 +50,21 @@ if the role of the username is 'user' he can't go to edit pages and can't delete
 ### Images of Project:
 
 Login Page:
-<URL>
+<img width="836" alt="image" src="https://github.com/twitoorel1/Store-Management/assets/64961625/a03e71fb-ac12-4264-9214-5b7f706f7d92">
+
 
 Products Page:
-<URL>
+<img width="856" alt="image" src="https://github.com/twitoorel1/Store-Management/assets/64961625/43378c01-c548-4e97-bd58-4837646a86a2">
+
 
 Edit Product Page:
-<URL>
+<img width="871" alt="image" src="https://github.com/twitoorel1/Store-Management/assets/64961625/1a88a9dc-0332-4d6a-8012-c3e4b639443e">
+
 
 Customers Page:
-<URL>
+<img width="853" alt="image" src="https://github.com/twitoorel1/Store-Management/assets/64961625/fc3c6bcc-a99a-4db2-981f-2c3e35079c84">
+
 
 Edit Customer Page:
-<URL>
+<img width="868" alt="image" src="https://github.com/twitoorel1/Store-Management/assets/64961625/73122315-f717-4009-bf84-0c7012450ea4">
+
