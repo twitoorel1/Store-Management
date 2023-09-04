@@ -54,8 +54,12 @@ const Header = () => {
 						</svg>
 					</div>
 				</span>
-				<span className="text-gray-900 tracking-wide uppercase font-semibold text-xl text-center hidden sm:flex">STORE MANAGEMENT</span>
-				<span className="text-gray-900 tracking-wide uppercase font-semibold text-xl text-center flex sm:hidden">S.M</span>
+				<span className="text-gray-900 tracking-wide uppercase font-semibold text-xl text-center hidden sm:flex">
+					<Link to={'/'}>STORE MANAGEMENT</Link>
+				</span>
+				<span className="text-gray-900 tracking-wide uppercase font-semibold text-xl text-center flex sm:hidden">
+					<Link to={'/'}>S.M</Link>
+				</span>
 			</div>
 
 			{/* Menu */}

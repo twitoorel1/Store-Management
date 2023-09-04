@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom';
 
-const Error404 = () => {
+const Error403 = () => {
 	return (
 		<div className="flex items-center justify-center flex-col w-screen h-screen">
-			<h1 className="text-3xl font-bold">Error 404</h1>
+			<h1 className="text-3xl font-bold">Error 403</h1>
 			<button className="mt-4 bg-gray-300 p-4 rounded-full shadow-md">
 				<Link to={'/'}>Go To HomePage</Link>
 			</button>
@@ -11,4 +11,4 @@ const Error404 = () => {
 	);
 };
 
-export default Error404;
+export default Error403;

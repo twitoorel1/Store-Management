@@ -39,6 +39,15 @@ export default function AuthProvider({ children }: LayoutProps) {
 		};
 	}, []);
 
+	// useEffect(() => {
+	// 	if (isAuthenticated === false && isLoading === false && user === null) {
+	// 		navigate('/auth/login', { replace: true });
+	// 		return;
+	// 	}
+	// }, [isAuthenticated, isLoading, user, navigate]);
+
+	useEffect(() => {}, []);
+
 	const authContextValue = useMemo(() => ({ isAuthenticated, user, isLoading, isError }), [isAuthenticated, user, isLoading, isError]);
 	return <AuthContext.Provider value={authContextValue}>{children}</AuthContext.Provider>;
 }

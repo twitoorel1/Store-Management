@@ -1,14 +1,18 @@
 import express from 'express';
 import catchAsyncError from '../errors/catchAsyncError';
 import productController from '../controllers/product.controllers';
-// import { authRole } from '../middlewares/auth.middleware';
-// import { EUserRoles } from '../types/global';
+import { authRole } from '../middlewares/auth.middleware';
+import { EUserRoles } from '../types/global';
 
 const router = express.Router();
 
-router.route('/').get(catchAsyncError(productController.getAll)).post(catchAsyncError(productController.createOne));
+router.route('/').get(catchAsyncError(productController.getAll)).post(authRole(EUserRoles.admin), catchAsyncError(productController.createOne));
 
-router.route('/id/:id').get(catchAsyncError(productController.getOneById)).patch(catchAsyncError(productController.updateOneById)).delete(catchAsyncError(productController.deleteOneById));
+router
+	.route('/id/:id')
+	.get(authRole(EUserRoles.admin), catchAsyncError(productController.getOneById))
+	.patch(authRole(EUserRoles.admin), catchAsyncError(productController.updateOneById))
+	.delete(authRole(EUserRoles.admin), catchAsyncError(productController.deleteOneById));
 
 router.get('/listPurchase/:customerId', catchAsyncError(productController.productsPurchase));
 

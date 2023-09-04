@@ -1,10 +1,9 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { FaRegMoneyBillAlt } from 'react-icons/fa';
 import { getAllFunction } from '@features/products/redux';
 import { getTotalPurchasesFunction } from '@features/purchases/redux';
 import { useAppDispatch, useAppSelector } from '@/hooks/useRedux';
-import { FaRegMoneyBillAlt } from 'react-icons/fa';
 import ProductBox from '@features/products/components/ProductBox';
-import { getAllCustomersPurchasedByProductIdFunction } from '@/features/customers/redux';
 
 const Product = () => {
 	const dispatch = useAppDispatch();

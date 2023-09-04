@@ -91,6 +91,7 @@ const EditProduct = () => {
 			</div>
 
 			{/* All Customers */}
+			<h1 className="font-semibold text-xl mb-2 underline underline-offset-4">Customers Purchases</h1>
 			<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-[30px]">
 				{/* Customer - Starting */}
 				<CustomerBox productCustomersPurchases={productCustomersPurchases} />

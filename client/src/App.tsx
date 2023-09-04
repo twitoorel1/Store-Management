@@ -1,4 +1,5 @@
 import { Routes, Route } from 'react-router-dom';
+import AdminWrapper from './middleware/AdminWrapper';
 
 import AuthLayout from '@/layouts/auth';
 import MainLayout from '@/layouts/main';
@@ -11,10 +12,10 @@ import EditProduct from '@/pages/products/EditProduct';
 import Customers from '@/pages/customers';
 import EditCustomer from '@/pages/customers/EditCustomer';
 import Purchases from '@/pages/purchases';
-import Error404 from '@/pages/Errors/Error404';
 
-// import { useAppSelector } from '@/hooks/useRedux';
-// const { user } = useAppSelector(state => state.auth);
+// Errors Pages
+import Error403 from './pages/Errors/Error403';
+import Error404 from '@/pages/Errors/Error404';
 
 const App = () => {
 	return (
@@ -24,12 +25,26 @@ const App = () => {
 
 				<Route path="products">
 					<Route index element={<Products />} />
-					<Route path=":id" element={<EditProduct />} />
+					<Route
+						path=":id"
+						element={
+							<AdminWrapper>
+								<EditProduct />
+							</AdminWrapper>
+						}
+					/>
 				</Route>
 
 				<Route path="customers">
 					<Route index element={<Customers />} />
-					<Route path=":id" element={<EditCustomer />} />
+					<Route
+						path=":id"
+						element={
+							<AdminWrapper>
+								<EditCustomer />
+							</AdminWrapper>
+						}
+					/>
 				</Route>
 
 				<Route path="purchases" element={<Purchases />} />
@@ -39,7 +54,7 @@ const App = () => {
 				<Route path="login" element={<Login />} />
 			</Route>
 
-			<Route path="403" element={<div>Error 403</div>} />
+			<Route path="403" element={<Error403 />} />
 			<Route path="*" element={<Error404 />} />
 		</Routes>
 	);
